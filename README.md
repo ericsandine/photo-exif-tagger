@@ -1,0 +1,4 @@
+```
+$ poetry shell 
+$ code .
+```
