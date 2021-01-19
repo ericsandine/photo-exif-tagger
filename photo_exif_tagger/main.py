@@ -28,9 +28,8 @@ gpx = gpxpy.parse(gpx_file)
 
 
 class Point(TypedDict):
-    y: float
-    x: float
-    ele: float
+    latitude: float
+    longitude: float
 
 
 point_list = []
@@ -42,25 +41,23 @@ for track in gpx.tracks:
             point_list.append(
                 (
                     point.time,
-                    Point(y=point.latitude, x=point.longitude, ele=point.elevation),
+                    Point(latitude=point.latitude, longitude=point.longitude),
                 )
             )
 
 
-def find_closest_points(image_time_utc: datetime, points: List) -> List[Point]:
+def find_closest_points(image_time_utc: datetime, points: List) -> tuple:
     # LOL so inefficient
     start = None
     end = None
     for i, p in enumerate(points):
+        # TODO handle the beginning / end of this list
         if p[0] < image_datetime < points[i + 1][0]:
             next_point = points[i + 1]
-            print("point: {} [{}, {}]".format(p[0], p[1]["y"], p[1]["x"]))
-            print("image: {}".format(image_time_utc))
-            print(
-                "point: {} [{}, {}]".format(
-                    next_point[0], next_point[1]["y"], next_point[1]["x"]
-                )
-            )
+            # Earth is flat, screw it
+            mid_point_y = (p[1]["latitude"] + next_point[1]["latitude"]) / 2
+            mid_point_x = (p[1]["longitude"] + next_point[1]["longitude"]) / 2
+    return (mid_point_y, mid_point_x)
 
 
-find_closest_points(image_time_utc, point_list)
+print(find_closest_points(image_time_utc, point_list))
