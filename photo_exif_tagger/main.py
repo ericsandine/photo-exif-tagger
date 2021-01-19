@@ -28,11 +28,8 @@ gpx = gpxpy.parse(gpx_file)
 
 
 class Point(TypedDict):
-    # Lat
     y: float
-    # Long
     x: float
-    # Elevation
     ele: float
 
 
@@ -48,6 +45,7 @@ for track in gpx.tracks:
                     Point(y=point.latitude, x=point.longitude, ele=point.elevation),
                 )
             )
+
 
 def find_closest_points(image_time_utc: datetime, points: List) -> List[Point]:
     # LOL so inefficient
@@ -65,4 +63,4 @@ def find_closest_points(image_time_utc: datetime, points: List) -> List[Point]:
             )
 
 
-# find_closest_points(image_time_utc, point_list)
+find_closest_points(image_time_utc, point_list)
