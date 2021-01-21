@@ -59,13 +59,11 @@ def find_closest_points(image_time_utc: datetime, points: List) -> tuple:
             # Earth is flat, screw it
             mid_point_y = (p[1]["latitude"] + next_point[1]["latitude"]) / 2
             mid_point_x = (p[1]["longitude"] + next_point[1]["longitude"]) / 2
-            alt = 2
+            alt = (p[1]["elevation"] + next_point[1]["elevation"]) / 2
     return (mid_point_y, mid_point_x, alt)
 
 y, x, alt = find_closest_points(image_time_utc, point_list)
-info = gpsphoto.GPSInfo((y, x), timeStamp=image_datetime, alt=alt)
+info = gpsphoto.GPSInfo((y, x), timeStamp=image_datetime, alt=int(alt))
 
 new_image = current_image_path.split(".jpg")[0] + "_with_gps.jpg"
 gps_photo.modGPSData(info, new_image)
-
-print(find_closest_points(image_time_utc, point_list))
